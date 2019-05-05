@@ -43,13 +43,13 @@ axios.interceptors.response.use(
     if (response.data.isSuccess === '9') {
       //登录超时
       LoadingBar.finish()
-      location.href = location.origin + '/promotion_manage_web/#/login'
+      location.href = location.origin + '/question/#/login'
     } else if (response.data.isSuccess === '4') {
       util.setCookie('prom', '', -1)
       showMessage.error(response.data.msg)
       LoadingBar.error()
       setTimeout(() => {
-        location.href = location.origin + '/promotion_manage_web/#/login'
+        location.href = location.origin + '/question/#/login'
       }, 2000)
     } else if (response.data.isSuccess === '1' || response.data.isSuccess === '2') { //业务异常
       // console.log(error)

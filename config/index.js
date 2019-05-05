@@ -19,10 +19,10 @@ module.exports={
         env:{
             NODE_ENV:'"dev"'
         },
-        index:path.resolve(__dirname,'../promotion_manage_web/index.html'),
-        assetsRoot:path.resolve(__dirname,'../promotion_manage_web'),
+        index:path.resolve(__dirname,'../question/index.html'),
+        assetsRoot:path.resolve(__dirname,'../question'),
         assetsSubDirectory:'static',
-        assetsPublicPath:'/promotion_manage_web/',
+        assetsPublicPath:'/question/',
         productionSourceMap: false, //是否打开打包映射文件
         productionGzip: false,
         productionGzipExtensions: ['js', 'css'],
@@ -32,10 +32,10 @@ module.exports={
         env:{
             NODE_ENV:'"test"'
         },
-        index:path.resolve(__dirname,'../promotion_manage_web/index.html'),
-        assetsRoot:path.resolve(__dirname,'../promotion_manage_web'),
+        index:path.resolve(__dirname,'../question/index.html'),
+        assetsRoot:path.resolve(__dirname,'../question'),
         assetsSubDirectory:'static',
-        assetsPublicPath:'/promotion_manage_web/',
+        assetsPublicPath:'/question/',
         productionSourceMap: false, //是否打开打包映射文件
         productionGzip: false,
         productionGzipExtensions: ['js', 'css'],
@@ -45,10 +45,10 @@ module.exports={
         env:{
             NODE_ENV:'"prep"'
         },
-        index:path.resolve(__dirname,'../promotion_manage_web/index.html'),
-        assetsRoot:path.resolve(__dirname,'../promotion_manage_web'),
+        index:path.resolve(__dirname,'../question/index.html'),
+        assetsRoot:path.resolve(__dirname,'../question'),
         assetsSubDirectory:'static',
-        assetsPublicPath:'/promotion_manage_web/',
+        assetsPublicPath:'/question/',
         productionSourceMap: false, //是否打开打包映射文件
         productionGzip: false,
         productionGzipExtensions: ['js', 'css'],
@@ -58,10 +58,10 @@ module.exports={
         env:{
             NODE_ENV:'"prod"'
         },
-        index:path.resolve(__dirname,'../promotion_manage_web/index.html'),
-        assetsRoot:path.resolve(__dirname,'../promotion_manage_web'),
+        index:path.resolve(__dirname,'../question/index.html'),
+        assetsRoot:path.resolve(__dirname,'../question'),
         assetsSubDirectory:'static',
-        assetsPublicPath:'/promotion_manage_web/',
+        assetsPublicPath:'/question/',
         productionSourceMap: false, //是否打开打包映射文件
         productionGzip: false,
         productionGzipExtensions: ['js', 'css'],

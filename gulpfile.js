@@ -2,13 +2,13 @@ let gulp = require('gulp') //加载gulp模块
 let minimist = require('minimist') //传参
 let pro = require('child_process') //运行子进程库
 let sftp = require('gulp-sftp') //sftp上传程序
-let projectName = 'promotion_manage_web'
+let projectName = 'question'
 let gutil = require('gulp-util')
 
 let username = process.env['tjdusername']
 let password = process.env['tjdpassword']
 let assets = process.cwd() + '/' + projectName
-let address = '/server/nginx/html/promotion_manage_web/promotion_manage_web'
+let address = '/server/nginx/html/question/question'
 
 let remoteServer1Prep = {
     host: '123.56.7.118',
