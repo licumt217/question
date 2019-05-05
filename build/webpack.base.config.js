@@ -12,7 +12,7 @@ var projectRoot = path.resolve(__dirname, '../');
 module.exports = {
     entry: {
         index: path.join(projectRoot, 'src/index'), //打包入口
-        vendor: ['jquery', 'iview', 'vue', 'util', 'tjdServices']
+        vendor: ['jquery', 'iview', 'vue']
     },
     output: {
         path: config.prod.assetsRoot,
@@ -25,14 +25,7 @@ module.exports = {
         //fallback: [path.join(__dirname, '../node_modules')],
         alias: {
             'vue': 'vue/dist/vue.js',
-            'src': path.resolve(__dirname, '../src'),
-            //'assets': path.resolve(__dirname, '../src/assets'),
-            //'components': path.resolve(__dirname, '../src/components'),
-            //'jquery': 'jquery'
-            //jquery: 'jquery/dist/jquery.min.js',
-            'util': path.join(projectRoot, 'src/assets/js/tjdUtils'),
-            'qrcode': path.join(projectRoot, 'src/assets/js/qrcode'), //生成二维码
-            'tjdServices': path.join(projectRoot, 'src/assets/js/tjdServices')
+            'src': path.resolve(__dirname, '../src')
         }
     },
     //externals: {
