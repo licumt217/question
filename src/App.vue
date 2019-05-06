@@ -1,77 +1,72 @@
 <template>
-    <div id="app">
-        <div class="layout" :class="{'layout_notlogin':!isLogin}">
-            <Layout>
-                <Sider ref="side1" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed"
-                       style="min-height: 1768px;" :class="{'hidden':!isLogin}">
-                    <Menu :active-name="activeMenuName" ref="menu" theme="dark" width="auto" @on-select="selectMenu" :class="menuitemClasses" >
+    <div class="layout" :class="{'layout_notlogin':!isLogin}">
+        <div class="login" v-if="!isLogin">
+            <router-view></router-view>
+        </div>
+        <Layout :class="{'layout_notlogin':!isLogin}" v-else>
+            <Header :style="{position: 'fixed', top:'0',width: '100%' ,zIndex:10}" v-show="isLogin">
+                <Menu mode="horizontal" theme="dark" active-name="1" @on-select="operate">
+                    <div class="layout-logo"></div>
+                    <div class="layout-nav">
 
-                        <template  v-for="menu in menuList">
-                            <template v-if="menu.children.length>0">
-                                <Submenu :name="menu.activeName">
-                                    <template slot="title">
-                                        <Icon :type="menu.icon" />
-                                        <span>{{menu.name}}</span>
-                                    </template>
-
-                                    <MenuItem :name="submenu.activeName" v-for="submenu in menu.children">
-                                        <span>{{submenu.name}}</span>
-                                    </MenuItem>
-                                </Submenu>
-                            </template>
-                            <template v-else>
-                                <MenuItem :name="menu.activeName"  >
-                                    <Icon :type="menu.icon"></Icon>
-                                    <span>{{menu.name}}</span>
-                                </MenuItem>
-                            </template>
-
+                        <template v-if="userType===0">
+                            <MenuItem name="1">
+                                <Icon type="ios-navigate"></Icon>
+                                报告
+                            </MenuItem>
+                            <MenuItem name="2">
+                                <Icon type="ios-navigate"></Icon>
+                                问卷
+                            </MenuItem>
+                            <Submenu name="3">
+                                <template slot="title">
+                                    <Icon type="ios-stats"/>
+                                    个人信息
+                                </template>
+                                <MenuItem name="logout" >查看信息</MenuItem>
+                                <MenuItem name="passModify">修改密码</MenuItem>
+                                <MenuItem name="logout" >退出登录</MenuItem>
+                            </Submenu>
                         </template>
 
-                    </Menu>
+
+                        <template v-else>
+                            <MenuItem name="4">
+                                <Icon type="ios-navigate"></Icon>
+                                量表管理
+                            </MenuItem>
+                            <MenuItem name="5">
+                                <Icon type="ios-navigate"></Icon>
+                                问卷管理
+                            </MenuItem>
+                            <MenuItem name="6">
+                                <Icon type="ios-navigate"></Icon>
+                                统计管理
+                            </MenuItem>
+                            <Submenu name="7">
+                                <template slot="title">
+                                    <Icon type="ios-stats"/>
+                                    用户管理
+                                </template>
+                                <MenuItem name="logout" >退出登录</MenuItem>
+                                <MenuItem name="passModify">修改密码</MenuItem>
+                            </Submenu>
+                        </template>
+
+                    </div>
+                </Menu>
+            </Header>
+
+            <Content :style="{margin: '88px 20px 0', background: '#fff', minHeight: '730px'}" >
+                <router-view></router-view>
+            </Content>
+
+            <Footer class="layout-footer-center" v-show="isLogin">2011-2016 &copy; TalkingData</Footer>
+
+            <Pass ref="pass" :isShow="isShowPassModifyModal"></Pass>
 
 
-
-                </Sider>
-                <Layout :class="{'layout_notlogin':!isLogin}">
-                    <Header :style="{padding: 0}" class="layout-header-bar" :class="{'hidden':!isLogin}">
-                        <Row>
-                            <Col span="4">
-                                <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '0 20px'}"
-                                      type="md-menu" size="24"></Icon>
-                            </Col>
-                            <Col span="6" offset="14">
-
-                                <Menu mode="horizontal" active-name="1" @on-select="operate" style="display: inline-block;float: right">
-                                    <Submenu name="3">
-                                        <template slot="title">
-                                            <Icon type="ios-stats"/>
-                                            个人中心
-                                        </template>
-                                        <MenuGroup title="个人设置" >
-                                            <MenuItem name="logout" >退出登录</MenuItem>
-                                            <MenuItem name="passModify">修改密码</MenuItem>
-                                        </MenuGroup>
-                                    </Submenu>
-                                </Menu>
-                                <div style="float: right" @click="go2UserDetail">
-                                    <Avatar icon="ios-person" style="background-color: #87d068" /> {{username}}
-                                </div>
-
-                            </Col>
-                        </Row>
-
-
-                    </Header>
-                    <Content :style="{margin: '20px', background: '#fff', minHeight: '260px'}">
-                        <router-view></router-view>
-                    </Content>
-                </Layout>
-            </Layout>
-        </div>
-
-        <Pass ref="pass" :isShow="isShowPassModifyModal"></Pass>
-
+        </Layout>
     </div>
 </template>
 
@@ -83,10 +78,30 @@
             return {
                 isCollapsed: false,
                 isShowPassModifyModal:false,
+                userType:0,//用户类型：管理员和普通用户
             }
         },
         components:{
           Pass
+        },
+        watch: {
+            $route (to, from) {
+                console.log(to.path)
+
+
+                if (!this.isLogin && to.path !== '/user/register') {
+                    this.$router.push('/user/login')
+                }
+                //
+                //
+                //
+                // if (to.path === '/login' || to.path === '/user/register') {
+                //     // this.isLogin = true
+                // } else {
+                //     // $('.layout').show()
+                //     // this.isLogin = false
+                // }
+            },
         },
         computed: {
 
@@ -137,7 +152,7 @@
                 if(name==='logout'){
 
                     this.$store.commit('reset')
-                    this.$router.push('/login')
+                    this.$router.push('/user/login')
 
                 }else if(name==='passModify'){
                     this.$refs.pass.show();
@@ -151,80 +166,73 @@
         },
         mounted() {
 
-            if (!this.isLogin) {
-                this.$router.push('/login')
-            }
+
+
+
         }
     }
 </script>
 
 <style>
     body {
-        overflow: hidden;
+        /*overflow: hidden;*/
     }
 
-    .layout {
-        border: 1px solid #d7dde4;
-        background: #f5f7f9;
-        position: relative;
-        border-radius: 4px;
-        overflow: hidden;
-    }
 
     .layout_notlogin {
-        border: none;
+        border: none!important;
         background: #fff !important;
     }
 
-    .layout-header-bar {
-        background: #fff !important;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-    }
+    /*.layout-header-bar {*/
+        /*background: #fff !important;*/
+        /*box-shadow: 0 1px 1px rgba(0, 0, 0, .1);*/
+    /*}*/
 
-    .layout-logo-left {
-        width: 90%;
-        height: 30px;
-        background: #5b6270;
-        border-radius: 3px;
-        margin: 15px auto;
-    }
+    /*.layout-logo-left {*/
+        /*width: 90%;*/
+        /*height: 30px;*/
+        /*background: #5b6270;*/
+        /*border-radius: 3px;*/
+        /*margin: 15px auto;*/
+    /*}*/
 
-    .menu-icon {
-        transition: all .3s;
-    }
+    /*.menu-icon {*/
+        /*transition: all .3s;*/
+    /*}*/
 
-    .rotate-icon {
-        transform: rotate(-90deg);
-    }
+    /*.rotate-icon {*/
+        /*transform: rotate(-90deg);*/
+    /*}*/
 
-    .menu-item span {
-        display: inline-block;
-        overflow: hidden;
-        width: 69px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        vertical-align: bottom;
-        transition: width .2s ease .2s;
-    }
+    /*.menu-item span {*/
+        /*display: inline-block;*/
+        /*overflow: hidden;*/
+        /*width: 69px;*/
+        /*text-overflow: ellipsis;*/
+        /*white-space: nowrap;*/
+        /*vertical-align: bottom;*/
+        /*transition: width .2s ease .2s;*/
+    /*}*/
 
-    .menu-item i {
-        transform: translateX(0px);
-        transition: font-size .2s ease, transform .2s ease;
-        vertical-align: middle;
-        font-size: 16px;
-    }
+    /*.menu-item i {*/
+        /*transform: translateX(0px);*/
+        /*transition: font-size .2s ease, transform .2s ease;*/
+        /*vertical-align: middle;*/
+        /*font-size: 16px;*/
+    /*}*/
 
-    .collapsed-menu span {
-        width: 0px;
-        transition: width .2s ease;
-    }
+    /*.collapsed-menu span {*/
+        /*width: 0px;*/
+        /*transition: width .2s ease;*/
+    /*}*/
 
-    .collapsed-menu i {
-        transform: translateX(5px);
-        transition: font-size .2s ease .2s, transform .2s ease .2s;
-        vertical-align: middle;
-        font-size: 22px;
-    }
+    /*.collapsed-menu i {*/
+        /*transform: translateX(5px);*/
+        /*transition: font-size .2s ease .2s, transform .2s ease .2s;*/
+        /*vertical-align: middle;*/
+        /*font-size: 22px;*/
+    /*}*/
 
     .hidden {
         display: none;
@@ -232,9 +240,43 @@
     .ivu-menu-horizontal.ivu-menu-light:after{
         width: auto!important;
     }
-     .ivu-menu-horizontal .ivu-menu-submenu {
-        float: right!important;
-         display: inline-block!important;
+     /*.ivu-menu-horizontal .ivu-menu-submenu {*/
+        /*float: right!important;*/
+         /*display: inline-block!important;*/
+    /*}*/
+
+
+
+
+
+
+
+
+
+    .layout{
+        border: 1px solid #d7dde4;
+        background: #f5f7f9;
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .layout-logo{
+        width: 100px;
+        height: 30px;
+        background: #5b6270;
+        border-radius: 3px;
+        float: left;
+        position: relative;
+        top: 15px;
+        left: 20px;
+    }
+    .layout-nav{
+        width: 510px;
+        margin: 0 auto;
+        margin-right: 20px;
+    }
+    .layout-footer-center{
+        text-align: center;
     }
 
 </style>

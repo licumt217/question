@@ -10,7 +10,8 @@ const state={
     activeMenuName:sessionStorage.getItem("activeMenuName")||'1-1',
     username:sessionStorage.getItem("username")||'',
     userInfo:sessionStorage.getItem("userInfo")?JSON.parse(sessionStorage.getItem("userInfo")):{},
-    menuList:sessionStorage.getItem("menuList")?JSON.parse(sessionStorage.getItem("menuList")):[]
+    menuList:sessionStorage.getItem("menuList")?JSON.parse(sessionStorage.getItem("menuList")):[],
+    titleList:sessionStorage.getItem("titleList")?JSON.parse(sessionStorage.getItem("titleList")):[]
 }
 
 const getters={
@@ -51,6 +52,10 @@ const mutations={
     menuList:(state,value)=>{
         sessionStorage.setItem("menuList",JSON.stringify(value))
         state.menuList=value
+    },
+    titleList:(state,value)=>{
+        sessionStorage.setItem("titleList",JSON.stringify(value))
+        state.titleList=value
     },
     reset(state){
         for(let key in state){

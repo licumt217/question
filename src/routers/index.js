@@ -4,7 +4,7 @@ import store from '../store'
 
 Vue.use(VueRouter)
 
-const login = r => require.ensure([], () => r(require('../pages/login')), 'login')
+
 
 const homepage = r => require.ensure([], () => r(require('../pages/homepage')), 'homepage')
 
@@ -28,19 +28,30 @@ const role_operate = r => require.ensure([], () => r(require('../pages/role/oper
 const role_auth = r => require.ensure([], () => r(require('../pages/role/auth')), 'role_auth')
 
 
+const user_login = r => require.ensure([], () => r(require('../pages/user/login')), 'user_login')
+const user_register = r => require.ensure([], () => r(require('../pages/user/register')), 'user_register')
+
+
+const questiontype_list = r => require.ensure([], () => r(require('../pages/questiontype/list')), 'questiontype_list')
+const questiontype_operate = r => require.ensure([], () => r(require('../pages/questiontype/operate')), 'questiontype_operate')
+
+
 
 
 
 const router=new VueRouter({
-    base:'library',
-    mode:'history',
+    base:'question',
+    // mode:'history',
     routes:[
         {
             path:'/',
             component:homepage
         },{
-            path:'/login',
-            component:login
+            path:'/user/login',
+            component:user_login
+        },{
+            path:'/user/register',
+            component:user_register
         },
 
 
@@ -143,10 +154,29 @@ const router=new VueRouter({
             }
         },
 
+
+        {
+            path:'/questiontype/list',
+            component:questiontype_list,
+            meta:{
+                activeName:'/role/list'
+            }
+        },{
+            path:'/questiontype/operate',
+            component:questiontype_operate,
+            meta:{
+                activeName:'/questiontype/operate'
+            }
+        },
+
     ]
 })
 
 router.afterEach((to,from,next)=>{
+
+
+
+
 
     //切换路由时菜单动态跟随切换
         store.commit('activeMenuName',to.meta.activeName)

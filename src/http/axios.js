@@ -6,7 +6,7 @@ axios.defaults.baseURL = '';
 
 var baseURL = 'http://192.168.23.1:9518/'
 if (location.host.indexOf('prep') > -1 || location.host.indexOf('localhost') > -1) {
-    baseURL = 'https://prep.tingjiandan.com/'
+    baseURL = 'http://localhost:3000/'
 } else if (location.host.indexOf('open') > -1) {
     baseURL = 'https://open.tingjiandan.com/'
 }
