@@ -57,7 +57,7 @@
 
 <script>
     const md5=require('md5')
-    import {Aa} from '../../assets/js/aa'
+    import {Util} from '../../assets/js/Util'
     export default {
         data() {
             return {
@@ -104,12 +104,12 @@
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
 
-                        if(!Aa.isValidPhone(this.formItem.username)){
+                        if(!Util.isValidPhone(this.formItem.username)){
                             this.$Message.warning("请输入合法的手机号！")
                             return;
                         }
 
-                        if(!Aa.isValidEmail(this.formItem.email)){
+                        if(!Util.isValidEmail(this.formItem.email)){
                             this.$Message.warning("请输入合法的电子邮箱！")
                             return;
                         }

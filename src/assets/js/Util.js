@@ -1,4 +1,4 @@
-class Aa{
+class Util{
 
 
     /**
@@ -63,4 +63,4 @@ class Aa{
     }
 }
 
-export {Aa}
+export {Util}
