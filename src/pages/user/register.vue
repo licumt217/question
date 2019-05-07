@@ -13,8 +13,8 @@
 
                             <Form :model="formItem" :rules="rules" ref="loginForm" :label-width="80" class="demo-ruleForm">
 
-                                <Form-item prop="username" label="手机号">
-                                    <Input  :maxlength="11" placeholder="请输入手机号" v-model="formItem.username"></Input>
+                                <Form-item prop="phone" label="手机号">
+                                    <Input  :maxlength="11" placeholder="请输入手机号" v-model="formItem.phone"></Input>
                                 </Form-item>
 
                                 <Form-item prop="password" label="密码">
@@ -23,8 +23,8 @@
 
                                 <FormItem label="性别" prop="gender">
                                     <RadioGroup v-model="formItem.gender">
-                                        <Radio label="male">男士</Radio>
-                                        <Radio label="female">女士</Radio>
+                                        <Radio label="male">男</Radio>
+                                        <Radio label="female">女</Radio>
                                     </RadioGroup>
                                 </FormItem>
 
@@ -62,11 +62,11 @@
         data() {
             return {
                 formItem: {
-                    username: '',
+                    phone: '',
                     password: '',
                 },
                 rules: {
-                    username: [
+                    phone: [
                         {required: true, message: "手机号不能为空", trigger: "blur"},
                         {type: 'string', min: 11, message: '手机号长度不能少于11位', trigger: 'blur'}
                     ],
@@ -92,7 +92,7 @@
         },
         mounted() {
             if (this.isLogin) {
-                this.$router.push('/user/list')
+                this.$router.push('/user/login')
             }
         },
         methods: {
@@ -104,7 +104,7 @@
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
 
-                        if(!Util.isValidPhone(this.formItem.username)){
+                        if(!Util.isValidPhone(this.formItem.phone)){
                             this.$Message.warning("请输入合法的手机号！")
                             return;
                         }

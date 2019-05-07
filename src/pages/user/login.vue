@@ -12,8 +12,8 @@
 
                             <Form :model="formItem" :rules="rules" ref="loginForm" :label-width="0" class="demo-ruleForm">
 
-                                <Form-item prop="username">
-                                    <Input  :maxlength="20" placeholder="请输入用户名" v-model="formItem.username"></Input>
+                                <Form-item prop="phone">
+                                    <Input  :maxlength="20" placeholder="请输入手机号" v-model="formItem.phone"></Input>
                                 </Form-item>
 
                                 <Form-item prop="password">
@@ -25,9 +25,14 @@
                         </Tab-pane>
                     </Tabs>
 
+                    <p class="" style="text-align: right;">
+                        <a href="javascript:;" style="color:#393737;cursor: pointer;" @click="showForgetModal">忘记密码？</a>
+                    </p>
+
                     <div class="login-btn">
                         <Button type="primary" @click="login">登录</Button>
                     </div>
+
                     <div class="signup-btn">
                         <a href="javascript:" @click="register">注册</a>
                     </div>
@@ -35,24 +40,41 @@
                 </div>
             </div>
         </transition>
+
+        <Modal
+                v-model="isShowForgetModal"
+                title="请输入手机号"
+                :mask-closable="false"
+        >
+            <p>
+                <Input  :maxlength="11" placeholder="请输入手机号" v-model="phone"></Input>
+            </p>
+            <div slot="footer">
+                <Button type="text" size="large" @click="isShowForgetModal=false">取消</Button>
+                <Button type="primary" size="large" @click="ok">确定</Button>
+            </div>
+        </Modal>
     </div>
 
 </template>
 
 <script>
+    import {Util} from '../../assets/js/Util'
     const md5=require('md5')
     export default {
         data() {
             return {
+                phone:'',
+                isShowForgetModal:false,
                 formItem: {
-                    username: '',
+                    phone: '',
                     password: '',
                     // userType: 'student',
                     // studentNumber: '',
                     // jobNumber: '',
                 },
                 rules: {
-                    username: [
+                    phone: [
                         {required: true, message: "用户名不能为空", trigger: "blur"},
                         {type: 'string', min: 6, message: '用户名长度不能少于6位', trigger: 'blur'}
                     ],
@@ -69,10 +91,30 @@
         },
         mounted() {
             if (this.isLogin) {
-                this.$router.push('/user/list')
+                this.$router.push('/')
             }
         },
         methods: {
+            ok(){
+                if(this.phone && Util.isValidPhone(this.phone)){
+                    this.isShowForgetModal=false;
+                    this.$Message.success({
+                        content:`新的随机密码已发送至手机号${this.phone}对应的邮箱xxx@126.com，请注意查收！`,
+                        duration:7
+                    })
+                }else{
+                    this.$Message.warning(`请填写正确的手机号！`)
+                    this.isShowForgetModal=true;
+                }
+
+
+            },
+            showForgetModal(){
+                this.isShowForgetModal=true;
+            },
+            cancelModal(){
+
+            },
             register(){
                 this.$router.push('/user/register')
             },
@@ -99,7 +141,7 @@
                         this.$store.commit('userId', data._id)
                         this.$store.commit('username', data.username)
                         this.$store.commit('userInfo', data)
-                        this.getMenuList()
+                        // this.getMenuList()
 
                         return;
 
@@ -277,5 +319,6 @@
         opacity: 0;
         transform: translateY(-30px);
     }
+
 
 </style>

@@ -28,31 +28,13 @@
                         align:'center'
                     },
                     {
-                        title: '手机号',
-                        key: 'phone'
+                        title: '名称',
+                        key: 'name'
                     },
                     {
-                        title: '性别',
-                        key: 'gender',
-                        render: (h, params) => {
-                                    return h('div', {}, params.row.gender === 'male' ? '男' : '女')
-                                }
+                        title: '描述',
+                        key: 'desc',
                     },
-                    {
-                        title: '电子邮箱',
-                        key: 'email'
-                    },
-                    {
-                        title: '出生日期',
-                        key: 'birthday'
-                    },
-                    // {
-                    //     title: '用户类型',
-                    //     key: 'type',
-                    //     render: (h, params) => {
-                    //         return h('div', {}, params.row.type === 0 ? '学生' : params.row.type === 1 ? '教师' : '管理员')
-                    //     }
-                    // },
 
                     {
                         title: '操作',
@@ -106,32 +88,29 @@
                 this.http.get('users/list', {}).then(data => {
 
                     data=[{
-                        phone:'13521092619',
-                        gender:'male',
-                        birthday:'2019/02/17',
-                        email:'licumt222@126.com'
+                        name:'用户组1',
+                        desc:'我是用户组11哈哈哈',
                     },{
-                        phone:'12345678977',
-                        gender:'male',
-                        birthday:'2019/02/17',
-                        email:'licumt222@126.com'
+                        name:'用户组2',
+                        desc:'我是用户组11哈哈哈',
                     },{
-                        phone:'12588855545',
-                        gender:'female',
-                        birthday:'2011/02/17',
-                        email:'licumt222@126.com'
-                    }]
+                        name:'用户组3',
+                        desc:'我是用户组11哈哈哈',
+                    },{
+                        name:'用户组4',
+                        desc:'我是用户组11哈哈哈',
+                    },]
 
 
                     this.dataList = data;
                 })
             },
             add() {
-              this.$router.push('/user/operate')
+              this.$router.push('/userGroup/operate')
             },
             edit(params){
                 this.$router.push({
-                    path:'/user/operate',
+                    path:'/userGroup/operate',
                     query:{
                         opType:'edit',
                         id:'id',

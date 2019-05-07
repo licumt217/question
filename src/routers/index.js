@@ -8,10 +8,7 @@ Vue.use(VueRouter)
 
 const homepage = r => require.ensure([], () => r(require('../pages/homepage')), 'homepage')
 
-const user_list = r => require.ensure([], () => r(require('../pages/user/list')), 'user_list')
-const user_operate = r => require.ensure([], () => r(require('../pages/user/operate')), 'user_operate')
-const user_detail = r => require.ensure([], () => r(require('../pages/user/detail')), 'user_detail')
-const user_auth = r => require.ensure([], () => r(require('../pages/user/auth')), 'user_auth')
+
 
 const book_list = r => require.ensure([], () => r(require('../pages/book/list')), 'book_list')
 const book_operate = r => require.ensure([], () => r(require('../pages/book/operate')), 'book_operate')
@@ -28,8 +25,14 @@ const role_operate = r => require.ensure([], () => r(require('../pages/role/oper
 const role_auth = r => require.ensure([], () => r(require('../pages/role/auth')), 'role_auth')
 
 
+const user_list = r => require.ensure([], () => r(require('../pages/user/list')), 'user_list')
 const user_login = r => require.ensure([], () => r(require('../pages/user/login')), 'user_login')
 const user_register = r => require.ensure([], () => r(require('../pages/user/register')), 'user_register')
+const user_detail = r => require.ensure([], () => r(require('../pages/user/detail')), 'user_detail')
+const user_operate = r => require.ensure([], () => r(require('../pages/user/operate')), 'user_operate')
+
+const userGroup_list = r => require.ensure([], () => r(require('../pages/userGroup/list')), 'userGroup_list')
+const userGroup_operate = r => require.ensure([], () => r(require('../pages/userGroup/operate')), 'userGroup_operate')
 
 
 const questiontype_list = r => require.ensure([], () => r(require('../pages/questiontype/list')), 'questiontype_list')
@@ -46,45 +49,38 @@ const router=new VueRouter({
         {
             path:'/',
             component:homepage
-        },{
-            path:'/user/login',
-            component:user_login
-        },{
-            path:'/user/register',
-            component:user_register
         },
-
 
         //user
         {
             path:'/user/list',
             component:user_list
-            ,
-            meta:{
-                activeName:'/user/list'
-            }
+        },
+        {
+            path:'/user/login',
+            component:user_login
         },{
-            path:'/user/operate',
-            component:user_operate
-            ,
-            meta:{
-                activeName:'/user/list'
-            }
+            path:'/user/register',
+            component:user_register
         },{
             path:'/user/detail',
             component:user_detail
-            ,
-            meta:{
-                activeName:'/user/list'
-            }
         },{
-            path:'/user/auth',
-            component:user_auth
-            ,
-            meta:{
-                activeName:'/user/list'
-            }
+            path:'/user/operate',
+            component:user_operate
         },
+
+        //userGroup
+        {
+            path:'/userGroup/list',
+            component:userGroup_list
+        },{
+            path:'/userGroup/operate',
+            component:userGroup_operate
+        },
+
+
+
 
 
         //book
@@ -173,7 +169,6 @@ const router=new VueRouter({
 })
 
 router.afterEach((to,from,next)=>{
-
 
 
 

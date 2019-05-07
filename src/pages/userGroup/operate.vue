@@ -8,28 +8,17 @@
                 <div class="ms-login">
 
                     <Tabs >
-                        <Tab-pane label="用户操作" name="account" icon="android-person">
+                        <Tab-pane label="用户组操作" name="account" icon="android-person">
 
                             <Form :model="formItem" :rules="rules" ref="loginForm" :label-width="80" class="demo-ruleForm">
 
-                                <Form-item prop="phone" label="手机号">
-                                    <Input  :maxlength="11" placeholder="请输入手机号" v-model="formItem.phone"></Input>
+                                <Form-item prop="name" label="名称">
+                                    <Input  :maxlength="50" placeholder="请输入用户组名称" v-model="formItem.name"></Input>
                                 </Form-item>
 
-                                <FormItem label="性别" prop="gender">
-                                    <RadioGroup v-model="formItem.gender">
-                                        <Radio label="male">男</Radio>
-                                        <Radio label="female">女</Radio>
-                                    </RadioGroup>
-                                </FormItem>
-
-                                <Form-item prop="email" label="电子邮箱">
-                                    <Input  :maxlength="30" placeholder="请输入电子邮箱" v-model="formItem.email"></Input>
+                                <Form-item prop="desc" label="描述">
+                                    <Input type="textarea" :rows="4" :maxlength="300" placeholder="请输入用户组描述" v-model="formItem.desc"></Input>
                                 </Form-item>
-
-                                <FormItem label="出生日期" prop="birthday" >
-                                    <DatePicker type="date" placeholder="请选择出生日期" v-model="formItem.birthday" placement="top"></DatePicker>
-                                </FormItem>
 
                             </Form>
 
@@ -42,7 +31,6 @@
                     <div class="signup-btn">
                         <a href="javascript:" @click="back">返回</a>
                     </div>
-                    <!--<Spin size="large" fix ></Spin>-->
                 </div>
             </div>
         </transition>
@@ -59,29 +47,19 @@
                 isEdit:this.$route.query.opType==='edit',
                 id:this.$route.query.id,
                 formItem: {
-                    phone: '',
+                    name: '',
                 },
                 rules: {
-                    phone: [
-                        {required: true, message: "手机号不能为空", trigger: "blur"},
-                        {type: 'string', min: 11, message: '手机号长度不能少于11位', trigger: 'blur'}
+                    name: [
+                        {required: true, message: "用户组名称不能为空", trigger: "blur"},
                     ],
-                    gender: [
-                        {required: true, message: "性别不能为空", trigger: "change"}
-                    ],
-                    birthday: [
-                        {required: true, type:"date",message: "出生日期不能为空", trigger: "change"}
-                    ],
-                    email: [
-                        {required: true, message: "电子邮箱不能为空", trigger: "blur"}
+                    desc: [
+                        {required: true, message: "用户组描述不能为空", trigger: "blur"},
                     ],
                 },
             }
         },
         computed: {
-            isLogin() {
-                return this.$store.state.isLogin;
-            },
         },
         mounted() {
             if(this.isEdit){
@@ -94,7 +72,7 @@
         },
         methods: {
             back(){
-                this.$router.push('/user/list')
+                this.$router.push('/userGroup/list')
             },
             operate() {
 
@@ -105,16 +83,6 @@
                         let url='user/add';
                         if(this.isEdit){
                             url='user/update'
-                        }
-
-                        if(!Util.isValidPhone(this.formItem.phone)){
-                            this.$Message.warning("请输入合法的手机号！")
-                            return;
-                        }
-
-                        if(!Util.isValidEmail(this.formItem.email)){
-                            this.$Message.warning("请输入合法的电子邮箱！")
-                            return;
                         }
 
 
@@ -129,7 +97,7 @@
                             this.$Message.success("新增成功！")
                         }
 
-                        this.$router.push('/user/list')
+                        this.$router.push('/userGroup/list')
                         return;
 
 
@@ -178,7 +146,7 @@
     .mainContent {
         position: absolute;
         left: 50%;
-        margin-left: -190px;
+        margin-left: -250px;
     }
 
     .ms-title {
@@ -193,7 +161,7 @@
     }
 
     .ms-login {
-        width: 380px;
+        width: 500px;
         overflow: hidden;
         padding: 40px;
         border-radius: 5px;

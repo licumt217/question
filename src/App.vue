@@ -23,7 +23,7 @@
                                     <Icon type="ios-stats"/>
                                     个人信息
                                 </template>
-                                <MenuItem name="logout" >查看信息</MenuItem>
+                                <MenuItem name="detail">查看信息</MenuItem>
                                 <MenuItem name="passModify">修改密码</MenuItem>
                                 <MenuItem name="logout" >退出登录</MenuItem>
                             </Submenu>
@@ -48,8 +48,10 @@
                                     <Icon type="ios-stats"/>
                                     用户管理
                                 </template>
-                                <MenuItem name="logout" >退出登录</MenuItem>
+                                <MenuItem name="userGroupList">用户组管理</MenuItem>
+                                <MenuItem name="userList">用户管理</MenuItem>
                                 <MenuItem name="passModify">修改密码</MenuItem>
+                                <MenuItem name="logout" >退出登录</MenuItem>
                             </Submenu>
                         </template>
 
@@ -78,7 +80,7 @@
             return {
                 isCollapsed: false,
                 isShowPassModifyModal:false,
-                userType:0,//用户类型：管理员和普通用户
+                userType:1,//用户类型：管理员和普通用户
             }
         },
         components:{
@@ -87,7 +89,6 @@
         watch: {
             $route (to, from) {
                 console.log(to.path)
-
 
                 if (!this.isLogin && to.path !== '/user/register') {
                     this.$router.push('/user/login')
@@ -156,6 +157,12 @@
 
                 }else if(name==='passModify'){
                     this.$refs.pass.show();
+                }else if(name==='detail'){
+                    this.$router.push('/user/detail')
+                }else if(name==='userList'){
+                    this.$router.push('/user/list')
+                }else if(name==='userGroupList'){
+                    this.$router.push('/userGroup/list')
                 }
 
             },
