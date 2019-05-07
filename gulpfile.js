@@ -23,20 +23,6 @@ let remoteServer1Prep = {
     remotePath: address,
     user: username,
     pass: password
-  },
-  remoteServer1Test = {
-    host: '39.106.124.125',
-    port: 22444,
-    remotePath: address,
-    user: 'root',
-    pass: 'Tceasy01'
-  },
-  remoteServer1Dev = {
-    host: '192.5.0.20',
-    port: 22,
-    remotePath: address,
-    user: 'root',
-    pass: 'Tceasy01'
   }
 
 const build = (env) => {
@@ -54,9 +40,6 @@ const build = (env) => {
 //先执行build命令打包。在把程序上传至服务器
 gulp.task('dev', () => build('realDev').then(() => {
   gulp.src(assets + '/**').pipe(sftp(remoteServer1Dev))
-}))
-gulp.task('test', () => build('realTest').then(() => {
-  gulp.src(assets + '/**').pipe(sftp(remoteServer1Test))
 }))
 gulp.task('prep', () => build('realPrep').then(() => {
   console.log(assets + '/**')
