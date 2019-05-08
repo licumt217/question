@@ -8,6 +8,10 @@
             </Col>
         </Row>
         <Table stripe :columns="columns" :data="dataList"></Table>
+        <div style="text-align: center;margin-top: 1em;">
+            <Page :total="100" @on-change="pageChange"/>
+        </div>
+
     </div>
 
 
@@ -17,6 +21,18 @@
     export default {
         data() {
             return {
+                userGroup:'',
+                userGroupList:[{
+                    label:'用户组1',
+                    value:'1'
+                },{
+                    label:'用户组2',
+                    value:'2'
+                },{
+                    label:'用户组3',
+                    value:'3'
+                },],
+                isShowUserGroupModal:false,
                 columns: [
                     {
                         type:'index',
@@ -24,33 +40,37 @@
                         align:'center'
                     },
                     {
-                        title: '书籍名称',
+                        title: '量表名称',
                         key: 'name'
                     },
                     {
-                        title: '作者',
-                        key: 'author'
+                        title: '性别',
+                        key: 'gender',
+                        render: (h, params) => {
+                                    return h('div', {}, params.row.gender === 'male' ? '男' : '女')
+                                }
                     },
+                    {
+                        title: '电子邮箱',
+                        key: 'email'
+                    },
+                    {
+                        title: '出生日期',
+                        key: 'birthday'
+                    },
+                    // {
+                    //     title: '用户类型',
+                    //     key: 'type',
+                    //     render: (h, params) => {
+                    //         return h('div', {}, params.row.type === 0 ? '学生' : params.row.type === 1 ? '教师' : '管理员')
+                    //     }
+                    // },
 
                     {
                         title: '操作',
                         key: 'action',
                         render: (h, params) => {
                             return h('div', [
-                                h('Button',{
-                                    props:{
-                                        type:'primary',
-                                        size:'small'
-                                    },
-                                    style:{
-                                        marginRight:'5px'
-                                    },
-                                    on:{
-                                        click:()=>{
-                                            this.borrow(params)
-                                        }
-                                    }
-                                },'借阅'),
                                 h('Button',{
                                     props:{
                                         type:'primary',
@@ -78,7 +98,21 @@
                                             this.delete(params)
                                         }
                                     }
-                                },'删除')
+                                },'删除'),
+                                h('Button',{
+                                    props:{
+                                        type:'success',
+                                        size:'small'
+                                    },
+                                    style:{
+                                        marginRight:'5px'
+                                    },
+                                    on:{
+                                        click:()=>{
+                                            this.publish(params)
+                                        }
+                                    }
+                                },'发布')
                             ])
                         }
                     }
@@ -91,49 +125,46 @@
             this.getList()
         },
         methods: {
+            selectUserGroup(){
+
+            },
+            pageChange(page){
+              console.log(page)
+            },
             getList() {
-                this.http.get('books/list', {}).then(data => {
+                // this.http.get('users/list', {}).then(data => {
+
+                    let data=[{
+                        name:'问卷1',
+                        gender:'male',
+                        birthday:'2019/02/17',
+                        email:'licumt222@126.com'
+                    },{
+                        name:'问卷2',
+                        gender:'male',
+                        birthday:'2019/02/17',
+                        email:'licumt222@126.com'
+                    }]
+
+
                     this.dataList = data;
-                })
+                // })
             },
             add() {
-              this.$router.push('/book/operate')
+              this.$router.push('/table/operate')
             },
             edit(params){
                 this.$router.push({
-                    path:'/book/operate',
+                    path:'/table/operate',
                     query:{
                         opType:'edit',
-                        formItem:params.row
+                        id:'id',
+                        // id:params.row._id,
                     }
                 })
             },
-            borrow(params){
-
-                this.http.get('borrows/list',{
-                    params:{
-                        book:params.row._id,
-                        state:0
-                    }
-                }).then((data)=>{
-                    console.log(data)
-                    if(data && data.length>0){
-                        this.$Message.warning("此书已被他人借阅！")
-                    }else{
-                        this.$router.push({
-                            path:'/borrow/operate',
-                            query:{
-                                bookId:params.row._id
-                            }
-                        })
-                    }
-
-
-                }).catch(error=>{
-                    this.$Message.error(error)
-                })
-
-
+            publish(params){
+                this.$Message.success("发布成功！")
             },
             delete(params){
 
@@ -142,14 +173,17 @@
                     content: '',
                     onOk: () => {
 
-                        this.http.post('books/remove',{
-                            _id:params.row._id
-                        }).then(()=>{
-                            this.$Message.success("删除成功")
-                            this.getList()
-                        }).catch(error=>{
-                            this.$Message.error(error)
-                        })
+                        this.$Message.success("删除成功")
+                        this.getUserList()
+
+                        // this.http.post('users/remove',{
+                        //     _id:params.row._id
+                        // }).then(()=>{
+                        //     this.$Message.success("删除成功")
+                        //     this.getUserList()
+                        // }).catch(error=>{
+                        //     this.$Message.error(error)
+                        // })
 
                     },
                     onCancel: () => {
@@ -163,21 +197,4 @@
 </script>
 
 <style scoped>
-    h3 {
-        margin: 40px 0 0;
-    }
-
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
-
-    a {
-        color: #42b983;
-    }
 </style>

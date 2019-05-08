@@ -8,23 +8,6 @@ Vue.use(VueRouter)
 
 const homepage = r => require.ensure([], () => r(require('../pages/homepage')), 'homepage')
 
-
-
-const book_list = r => require.ensure([], () => r(require('../pages/book/list')), 'book_list')
-const book_operate = r => require.ensure([], () => r(require('../pages/book/operate')), 'book_operate')
-
-const borrow_list = r => require.ensure([], () => r(require('../pages/borrow/list')), 'borrow_list')
-const borrow_operate = r => require.ensure([], () => r(require('../pages/borrow/operate')), 'borrow_operate')
-
-
-const resource_list = r => require.ensure([], () => r(require('../pages/resource/list')), 'resource_list')
-const resource_operate = r => require.ensure([], () => r(require('../pages/resource/operate')), 'resource_operate')
-
-const role_list = r => require.ensure([], () => r(require('../pages/role/list')), 'role_list')
-const role_operate = r => require.ensure([], () => r(require('../pages/role/operate')), 'role_operate')
-const role_auth = r => require.ensure([], () => r(require('../pages/role/auth')), 'role_auth')
-
-
 const user_list = r => require.ensure([], () => r(require('../pages/user/list')), 'user_list')
 const user_login = r => require.ensure([], () => r(require('../pages/user/login')), 'user_login')
 const user_register = r => require.ensure([], () => r(require('../pages/user/register')), 'user_register')
@@ -33,6 +16,14 @@ const user_operate = r => require.ensure([], () => r(require('../pages/user/oper
 
 const userGroup_list = r => require.ensure([], () => r(require('../pages/userGroup/list')), 'userGroup_list')
 const userGroup_operate = r => require.ensure([], () => r(require('../pages/userGroup/operate')), 'userGroup_operate')
+
+const statistics_list = r => require.ensure([], () => r(require('../pages/statistics/list')), 'statistics_list')
+
+const paper_list = r => require.ensure([], () => r(require('../pages/paper/list')), 'paper_list')
+const paper_operate = r => require.ensure([], () => r(require('../pages/paper/operate')), 'paper_operate')
+
+const table_list = r => require.ensure([], () => r(require('../pages/table/list')), 'table_list')
+const table_operate = r => require.ensure([], () => r(require('../pages/table/operate')), 'table_operate')
 
 
 const questiontype_list = r => require.ensure([], () => r(require('../pages/questiontype/list')), 'questiontype_list')
@@ -70,6 +61,30 @@ const router=new VueRouter({
             component:user_operate
         },
 
+        //统计管理
+        {
+            path:'/statistics/list',
+            component:statistics_list
+        },
+
+        //问卷管理
+        {
+            path:'/paper/list',
+            component:paper_list
+        },{
+            path:'/paper/operate',
+            component:paper_operate
+        },
+
+        //量表管理
+        {
+            path:'/table/list',
+            component:table_list
+        },{
+            path:'/table/operate',
+            component:table_operate
+        },
+
         //userGroup
         {
             path:'/userGroup/list',
@@ -82,75 +97,7 @@ const router=new VueRouter({
 
 
 
-
-        //book
-        {
-            path:'/book/list',
-            component:book_list,
-            meta:{
-                activeName:'/book/list'
-            }
-        },{
-            path:'/book/operate',
-            component:book_operate,
-            meta:{
-                activeName:'/book/list'
-            }
-        },
-
-
-        //borrow
-        {
-            path:'/borrow/list',
-            component:borrow_list,
-            meta:{
-                activeName:'/borrow/list'
-            }
-        },{
-            path:'/borrow/operate',
-            component:borrow_operate,
-            meta:{
-                activeName:'/borrow/list'
-            }
-        },
-
-
-        {
-            path:'/resource/list',
-            component:resource_list,
-            meta:{
-                activeName:'/resource/list'
-            }
-        },{
-            path:'/resource/operate',
-            component:resource_operate,
-            meta:{
-                activeName:'/resource/list'
-            }
-        },
-
-
-        {
-            path:'/role/list',
-            component:role_list,
-            meta:{
-                activeName:'/role/list'
-            }
-        },{
-            path:'/role/operate',
-            component:role_operate,
-            meta:{
-                activeName:'/role/list'
-            }
-        },{
-            path:'/role/auth',
-            component:role_auth,
-            meta:{
-                activeName:'/role/list'
-            }
-        },
-
-
+        //试题类型
         {
             path:'/questiontype/list',
             component:questiontype_list,

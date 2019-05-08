@@ -3,7 +3,7 @@
     <div class="login-wrap">
         <transition name="slideT">
             <div class="mainContent" >
-                <div class="ms-title">推广管家</div>
+                <div class="ms-title">心理咨询</div>
 
                 <div class="ms-login">
 
@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="signup-btn">
-                        <a href="javascript:" @click="register">注册</a>
+                        <a href="javascript:;" @click="register">注册</a>
                     </div>
                     <!--<Spin size="large" fix ></Spin>-->
                 </div>

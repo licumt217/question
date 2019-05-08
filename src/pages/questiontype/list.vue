@@ -154,14 +154,17 @@
                     content: '',
                     onOk: () => {
 
-                        this.http.post('books/remove',{
-                            _id:params.row._id
-                        }).then(()=>{
-                            this.$Message.success("删除成功")
-                            this.getList()
-                        }).catch(error=>{
-                            this.$Message.error(error)
-                        })
+                        this.$Message.success("删除成功")
+                        this.getList()
+
+                        // this.http.post('books/remove',{
+                        //     _id:params.row._id
+                        // }).then(()=>{
+                        //     this.$Message.success("删除成功")
+                        //     this.getList()
+                        // }).catch(error=>{
+                        //     this.$Message.error(error)
+                        // })
 
                     },
                     onCancel: () => {

@@ -2,15 +2,60 @@
 
 
     <div>
-        <Row style="padding:5px;">
-            <Col span="2" offset="22">
-                <Button type="success" @click="add">新增</Button>
-            </Col>
-        </Row>
-        <Table stripe :columns="columns" :data="dataList"></Table>
-        <div style="text-align: center;margin-top: 1em;">
-            <Page :total="100" @on-change="pageChange"/>
-        </div>
+        <Tabs value="name1">
+
+            <TabPane label="问卷" name="name1">
+                <Row style="padding:5px;">
+
+
+
+                    <Col span="16">
+                        <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
+                            <FormItem prop="user" label="手机号" :label-width="60">
+                                <Input type="text" v-model="formInline.user" placeholder="Username">
+                                    <!--<span slot="prepend">手机号</span>-->
+                                </Input>
+                            </FormItem>
+                            <FormItem label="性别" :label-width="50" prop="gender">
+
+                                <Select v-model="formInline.gender">
+                                    <Option value="beijing">男</Option>
+                                    <Option value="shanghai">女</Option>
+                                </Select>
+                            </FormItem>
+
+                            <FormItem>
+                                <Button type="primary" icon="ios-search" @click="handleSubmit('formInline')">查询</Button>
+                            </FormItem>
+                        </Form>
+
+                    </Col>
+
+
+                    <Col span="2" offset="6">
+                        <Button type="success" @click="add">新增</Button>
+                    </Col>
+                </Row>
+                <Table stripe :columns="columns" :data="dataListOfPaper"></Table>
+                <div style="text-align: center;margin-top: 1em;">
+                    <Page :total="totalOfPaper" @on-change="pageChangeOfPaper"/>
+                </div>
+            </TabPane>
+
+            <TabPane label="反馈报告" name="name2">
+                <Row style="padding:5px;">
+                    <Col span="2" offset="22">
+                        <Button type="success" @click="add">新增</Button>
+                    </Col>
+                </Row>
+                <Table stripe :columns="columns" :data="dataListOfBack"></Table>
+                <div style="text-align: center;margin-top: 1em;">
+                    <Page :total="totalOfBack" @on-change="pageChangeOfBack"/>
+                </div>
+            </TabPane>
+        </Tabs>
+
+
 
     </div>
 
@@ -21,6 +66,21 @@
     export default {
         data() {
             return {
+                totalOfPaper:100,
+                totalOfBack:100,
+                formInline: {
+                    user: '',
+                    select: ''
+                },
+                ruleInline: {
+                    user: [
+                        { required: true, message: 'Please fill in the user name', trigger: 'blur' }
+                    ],
+                    gender: [
+                        { required: true, message: 'Please fill in the password.', trigger: 'change' },
+                        { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'change' }
+                    ]
+                },
                 columns: [
                     {
                         type:'index',
@@ -92,20 +152,33 @@
                     }
 
                 ],
-                dataList: []
+                dataListOfPaper: [],
+                dataListOfBack: []
             }
         },
         mounted() {
-            this.getUserList()
+            this.getList()
         },
         methods: {
-            pageChange(page){
-              console.log(page)
+            handleSubmit(name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$Message.success('Success!');
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
             },
-            getUserList() {
-                this.http.get('users/list', {}).then(data => {
+            pageChangeOfPaper(page){
+                console.log(page)
+            },
+            pageChangeOfBack(page){
+                console.log(page)
+            },
+            getList() {
+                // this.http.get('users/list', {}).then(data => {
 
-                    data=[{
+                    let data=[{
                         phone:'13521092619',
                         gender:'male',
                         birthday:'2019/02/17',
@@ -123,8 +196,9 @@
                     }]
 
 
-                    this.dataList = data;
-                })
+                    this.dataListOfPaper = data;
+                    this.dataListOfBack = data;
+                // })
             },
             add() {
               this.$router.push('/user/operate')
@@ -147,13 +221,13 @@
                     onOk: () => {
 
                         this.$Message.success("删除成功")
-                        this.getUserList()
+                        this.getList()
 
                         // this.http.post('users/remove',{
                         //     _id:params.row._id
                         // }).then(()=>{
                         //     this.$Message.success("删除成功")
-                        //     this.getUserList()
+                        //     this.getList()
                         // }).catch(error=>{
                         //     this.$Message.error(error)
                         // })

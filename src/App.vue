@@ -31,15 +31,15 @@
 
 
                         <template v-else>
-                            <MenuItem name="4">
+                            <MenuItem name="table">
                                 <Icon type="ios-navigate"></Icon>
                                 量表管理
                             </MenuItem>
-                            <MenuItem name="5">
+                            <MenuItem name="paper">
                                 <Icon type="ios-navigate"></Icon>
                                 问卷管理
                             </MenuItem>
-                            <MenuItem name="6">
+                            <MenuItem name="statistics">
                                 <Icon type="ios-navigate"></Icon>
                                 统计管理
                             </MenuItem>
@@ -163,6 +163,12 @@
                     this.$router.push('/user/list')
                 }else if(name==='userGroupList'){
                     this.$router.push('/userGroup/list')
+                }else if(name==='statistics'){
+                    this.$router.push('/statistics/list')
+                }else if(name==='paper'){
+                    this.$router.push('/paper/list')
+                }else if(name==='table'){
+                    this.$router.push('/table/list')
                 }
 
             },

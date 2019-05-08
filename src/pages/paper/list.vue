@@ -12,6 +12,22 @@
             <Page :total="100" @on-change="pageChange"/>
         </div>
 
+        <Modal
+                v-model="isShowUserGroupModal"
+                title="请选择用户组"
+                :mask-closable="false"
+        >
+            <p>
+                <Select v-model="userGroup" >
+                    <Option v-for="item in userGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+            </p>
+            <div slot="footer">
+                <Button type="text" size="large" @click="isShowUserGroupModal=false">取消</Button>
+                <Button type="primary" size="large" @click="selectUserGroup">确定</Button>
+            </div>
+        </Modal>
+
     </div>
 
 
@@ -21,6 +37,18 @@
     export default {
         data() {
             return {
+                userGroup:'',
+                userGroupList:[{
+                    label:'用户组1',
+                    value:'1'
+                },{
+                    label:'用户组2',
+                    value:'2'
+                },{
+                    label:'用户组3',
+                    value:'3'
+                },],
+                isShowUserGroupModal:false,
                 columns: [
                     {
                         type:'index',
@@ -28,13 +56,31 @@
                         align:'center'
                     },
                     {
-                        title: '名称',
+                        title: '问卷名称',
                         key: 'name'
                     },
                     {
-                        title: '描述',
-                        key: 'desc',
+                        title: '性别',
+                        key: 'gender',
+                        render: (h, params) => {
+                                    return h('div', {}, params.row.gender === 'male' ? '男' : '女')
+                                }
                     },
+                    {
+                        title: '电子邮箱',
+                        key: 'email'
+                    },
+                    {
+                        title: '出生日期',
+                        key: 'birthday'
+                    },
+                    // {
+                    //     title: '用户类型',
+                    //     key: 'type',
+                    //     render: (h, params) => {
+                    //         return h('div', {}, params.row.type === 0 ? '学生' : params.row.type === 1 ? '教师' : '管理员')
+                    //     }
+                    // },
 
                     {
                         title: '操作',
@@ -68,7 +114,21 @@
                                             this.delete(params)
                                         }
                                     }
-                                },'删除')
+                                },'删除'),
+                                h('Button',{
+                                    props:{
+                                        type:'success',
+                                        size:'small'
+                                    },
+                                    style:{
+                                        marginRight:'5px'
+                                    },
+                                    on:{
+                                        click:()=>{
+                                            this.publish(params)
+                                        }
+                                    }
+                                },'发布')
                             ])
                         }
                     }
@@ -78,45 +138,49 @@
             }
         },
         mounted() {
-            this.getUserList()
+            this.getList()
         },
         methods: {
+            selectUserGroup(){
+
+            },
             pageChange(page){
               console.log(page)
             },
-            getUserList() {
-                this.http.get('users/list', {}).then(data => {
+            getList() {
+                // this.http.get('users/list', {}).then(data => {
 
-                    data=[{
-                        name:'用户组1',
-                        desc:'我是用户组11哈哈哈',
+                    let data=[{
+                        name:'问卷1',
+                        gender:'male',
+                        birthday:'2019/02/17',
+                        email:'licumt222@126.com'
                     },{
-                        name:'用户组2',
-                        desc:'我是用户组11哈哈哈',
-                    },{
-                        name:'用户组3',
-                        desc:'我是用户组11哈哈哈',
-                    },{
-                        name:'用户组4',
-                        desc:'我是用户组11哈哈哈',
-                    },]
+                        name:'问卷2',
+                        gender:'male',
+                        birthday:'2019/02/17',
+                        email:'licumt222@126.com'
+                    }]
 
 
                     this.dataList = data;
-                })
+                // })
             },
             add() {
-              this.$router.push('/userGroup/operate')
+              this.$router.push('/paper/operate')
             },
             edit(params){
                 this.$router.push({
-                    path:'/userGroup/operate',
+                    path:'/paper/operate',
                     query:{
                         opType:'edit',
                         id:'id',
                         // id:params.row._id,
                     }
                 })
+            },
+            publish(params){
+                this.isShowUserGroupModal=true;
             },
             delete(params){
 
@@ -149,21 +213,4 @@
 </script>
 
 <style scoped>
-    h3 {
-        margin: 40px 0 0;
-    }
-
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
-
-    a {
-        color: #42b983;
-    }
 </style>
