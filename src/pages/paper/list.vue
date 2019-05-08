@@ -60,27 +60,16 @@
                         key: 'name'
                     },
                     {
-                        title: '性别',
-                        key: 'gender',
+                        title: '创建时间',
+                        key: 'createDt'
+                    },
+                    {
+                        title: '状态',
+                        key: 'state',
                         render: (h, params) => {
-                                    return h('div', {}, params.row.gender === 'male' ? '男' : '女')
-                                }
+                            return h('div', {}, params.row.state === 0 ? '已完成' : '未完成')
+                        }
                     },
-                    {
-                        title: '电子邮箱',
-                        key: 'email'
-                    },
-                    {
-                        title: '出生日期',
-                        key: 'birthday'
-                    },
-                    // {
-                    //     title: '用户类型',
-                    //     key: 'type',
-                    //     render: (h, params) => {
-                    //         return h('div', {}, params.row.type === 0 ? '学生' : params.row.type === 1 ? '教师' : '管理员')
-                    //     }
-                    // },
 
                     {
                         title: '操作',
@@ -150,17 +139,15 @@
             getList() {
                 // this.http.get('users/list', {}).then(data => {
 
-                    let data=[{
-                        name:'问卷1',
-                        gender:'male',
-                        birthday:'2019/02/17',
-                        email:'licumt222@126.com'
-                    },{
-                        name:'问卷2',
-                        gender:'male',
-                        birthday:'2019/02/17',
-                        email:'licumt222@126.com'
-                    }]
+                let data=[{
+                    name:'问卷1',
+                    createDt:'2019/02/17',
+                    state:0,
+                },{
+                    name:'问卷2',
+                    createDt:'2019/02/17',
+                    state:1,
+                }]
 
 
                     this.dataList = data;

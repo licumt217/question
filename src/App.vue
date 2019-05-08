@@ -150,25 +150,40 @@
 
             operate(name){
 
-                if(name==='logout'){
+                switch (name) {
+                    case 'logout':
+                        this.$store.commit('reset')
+                        this.$router.push('/user/login')
+                        break;
 
-                    this.$store.commit('reset')
-                    this.$router.push('/user/login')
+                    case 'passModify':
+                        this.$refs.pass.show();
+                        break;
 
-                }else if(name==='passModify'){
-                    this.$refs.pass.show();
-                }else if(name==='detail'){
-                    this.$router.push('/user/detail')
-                }else if(name==='userList'){
-                    this.$router.push('/user/list')
-                }else if(name==='userGroupList'){
-                    this.$router.push('/userGroup/list')
-                }else if(name==='statistics'){
-                    this.$router.push('/statistics/list')
-                }else if(name==='paper'){
-                    this.$router.push('/paper/list')
-                }else if(name==='table'){
-                    this.$router.push('/table/list')
+                    case 'detail':
+                        this.$router.push('/user/detail')
+                        break;
+
+                    case 'userList':
+                        this.$router.push('/user/list')
+                        break;
+
+                    case 'userGroupList':
+                        this.$router.push('/userGroup/list')
+                        break;
+
+                    case 'statistics':
+                        this.$router.push('/statistics/list')
+                        break;
+
+                    case 'paper':
+                        this.$router.push('/paper/list')
+                        break;
+
+                    case 'table':
+                        this.$router.push('/table/list')
+                        break;
+
                 }
 
             },
