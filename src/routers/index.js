@@ -22,6 +22,8 @@ const statistics_list = r => require.ensure([], () => r(require('../pages/statis
 const paper_list = r => require.ensure([], () => r(require('../pages/paper/list')), 'paper_list')
 const paper_operate = r => require.ensure([], () => r(require('../pages/paper/operate')), 'paper_operate')
 
+const childpaper_list = r => require.ensure([], () => r(require('../pages/childpaper/list')), 'childpaper_list')
+
 const table_list = r => require.ensure([], () => r(require('../pages/table/list')), 'table_list')
 const table_operate = r => require.ensure([], () => r(require('../pages/table/operate')), 'table_operate')
 
@@ -74,6 +76,12 @@ const router=new VueRouter({
         },{
             path:'/paper/operate',
             component:paper_operate
+        },
+
+        //子问卷管理
+        {
+            path:'/childpaper/list',
+            component:childpaper_list
         },
 
         //量表管理

@@ -4,7 +4,7 @@
     <div>
         <Row style="padding:5px;">
             <Col span="2" offset="22">
-                <Button type="success" @click="add">新增</Button>
+                <Button type="success" @click="add">创建问卷</Button>
             </Col>
         </Row>
         <Table stripe :columns="columns" :data="dataList"></Table>
@@ -28,6 +28,28 @@
             </div>
         </Modal>
 
+
+        <Modal
+                v-model="isShowPaperModal"
+                :title="opType==='add'?'创建问卷':'编辑问卷'"
+                :mask-closable="false"
+        >
+            <Form :model="paperForm" :label-width="80" :rules="paperFormRules" ref="paperForm">
+                <FormItem label="名称" prop="name">
+                    <Input v-model="paperForm.name" placeholder="请输入问卷名称"></Input>
+                </FormItem>
+                <FormItem label="别名" prop="aliasName">
+                    <Input v-model="paperForm.aliasName" placeholder="请输入问卷别名"></Input>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="text" size="large" @click="isShowPaperModal=false">取消</Button>
+                <Button type="primary" size="large" @click="opPaper">确定</Button>
+            </div>
+        </Modal>
+
+
+
     </div>
 
 
@@ -37,6 +59,19 @@
     export default {
         data() {
             return {
+                paperFormRules: {
+                    name: [
+                        {required: true, message: "问卷名称不能为空", trigger: "blur"}
+                    ],
+                    aliasName: [
+                        {required: true, message: "问卷别名不能为空", trigger: "blur"}
+                    ],
+                },
+                paperForm:{
+                  name:'',
+                  aliasName:''
+                },
+                isShowPaperModal:false,
                 userGroup:'',
                 userGroupList:[{
                     label:'用户组1',
@@ -56,8 +91,12 @@
                         align:'center'
                     },
                     {
-                        title: '问卷名称',
+                        title: '名称',
                         key: 'name'
+                    },
+                    {
+                        title: '别名',
+                        key: 'aliasName'
                     },
                     {
                         title: '创建时间',
@@ -92,6 +131,20 @@
                                 },'编辑'),
                                 h('Button',{
                                     props:{
+                                        type:'primary',
+                                        size:'small'
+                                    },
+                                    style:{
+                                        marginRight:'5px'
+                                    },
+                                    on:{
+                                        click:()=>{
+                                            this.go2ChildList(params)
+                                        }
+                                    }
+                                },'查看'),
+                                h('Button',{
+                                    props:{
                                         type:'error',
                                         size:'small'
                                     },
@@ -123,13 +176,28 @@
                     }
 
                 ],
-                dataList: []
+                dataList: [],
+                opType:'add',
             }
         },
         mounted() {
             this.getList()
         },
         methods: {
+            opPaper(){
+                this.$refs.paperForm.validate(valid=>{
+                    if(valid){
+                        this.isShowPaperModal=false;
+
+                        if(this.opType==='add'){
+                            this.$Message.success("添加成功！")
+                        }else{
+                            this.$Message.success("编辑成功！")
+                        }
+
+                    }
+                })
+            },
             selectUserGroup(){
 
             },
@@ -141,10 +209,12 @@
 
                 let data=[{
                     name:'问卷1',
+                    aliasName:'问卷别名1',
                     createDt:'2019/02/17',
                     state:0,
                 },{
                     name:'问卷2',
+                    aliasName:'问卷别名2',
                     createDt:'2019/02/17',
                     state:1,
                 }]
@@ -153,18 +223,31 @@
                     this.dataList = data;
                 // })
             },
-            add() {
-              this.$router.push('/paper/operate')
+            /**
+             * 查看，进入子问卷
+             */
+            go2ChildList(){
+                this.$router.push('/childpaper/list')
             },
+            add() {
+                this.paperForm={}
+                this.opType='add'
+                this.isShowPaperModal=true;
+            },
+
             edit(params){
-                this.$router.push({
-                    path:'/paper/operate',
-                    query:{
-                        opType:'edit',
-                        id:'id',
-                        // id:params.row._id,
-                    }
-                })
+                this.opType='edit'
+                this.paperForm=params.row;
+                this.isShowPaperModal=true;
+
+                // this.$router.push({
+                //     path:'/paper/operate',
+                //     query:{
+                //         opType:'edit',
+                //         id:'id',
+                //         // id:params.row._id,
+                //     }
+                // })
             },
             publish(params){
                 this.isShowUserGroupModal=true;
