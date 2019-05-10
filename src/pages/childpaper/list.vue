@@ -28,6 +28,23 @@
                 <FormItem label="别名" prop="aliasName">
                     <Input v-model="paperForm.aliasName" placeholder="请输入问卷别名"></Input>
                 </FormItem>
+                <h3>选择量表</h3>
+                <br/>
+                <FormItem label="" prop="measureTable">
+                    <CheckboxGroup v-model="paperForm.measureTable">
+                        <Checkbox label="香蕉"></Checkbox>
+                        <Checkbox label="苹果"></Checkbox>
+                        <Checkbox label="西瓜232"></Checkbox>
+                        <Checkbox label="西瓜2323"></Checkbox>
+                        <Checkbox label="西瓜2322222"></Checkbox>
+                        <Checkbox label="西瓜2"></Checkbox>
+                        <Checkbox label="西1"></Checkbox>
+                        <Checkbox label="西2"></Checkbox>
+                        <Checkbox label="西3"></Checkbox>
+                        <Checkbox label="西4"></Checkbox>
+                    </CheckboxGroup>
+                </FormItem>
+
             </Form>
             <div slot="footer">
                 <Button type="text" size="large" @click="isShowPaperModal=false">取消</Button>
@@ -54,6 +71,46 @@
         </Modal>
 
 
+        <!--规则弹窗-->
+        <Modal
+                v-model="isShowRuleModal"
+                title="规则设置"
+                :mask-closable="false"
+        >
+
+            <!-- TODO 此处规则如何设置？此处的条目个数是指？共几条是用户随便添加的还是？-->
+            <Form :model="ruleForm" :label-width="80" ref="ruleForm">
+                <FormItem label="名称" prop="name">
+                    <Input v-model="paperForm.name" placeholder="请输入问卷名称"></Input>
+                </FormItem>
+                <FormItem label="别名" prop="aliasName">
+                    <Input v-model="paperForm.aliasName" placeholder="请输入问卷别名"></Input>
+                </FormItem>
+                <h3>选择量表</h3>
+                <br/>
+                <FormItem label="" prop="measureTable">
+                    <CheckboxGroup v-model="paperForm.measureTable">
+                        <Checkbox label="香蕉"></Checkbox>
+                        <Checkbox label="苹果"></Checkbox>
+                        <Checkbox label="西瓜232"></Checkbox>
+                        <Checkbox label="西瓜2323"></Checkbox>
+                        <Checkbox label="西瓜2322222"></Checkbox>
+                        <Checkbox label="西瓜2"></Checkbox>
+                        <Checkbox label="西1"></Checkbox>
+                        <Checkbox label="西2"></Checkbox>
+                        <Checkbox label="西3"></Checkbox>
+                        <Checkbox label="西4"></Checkbox>
+                    </CheckboxGroup>
+                </FormItem>
+
+            </Form>
+            <div slot="footer">
+                <Button type="text" size="large" @click="isShowPaperModal=false">取消</Button>
+                <Button type="primary" size="large" @click="opPaper">确定</Button>
+            </div>
+        </Modal>
+
+
 
 
 
@@ -69,6 +126,7 @@
     export default {
         data() {
             return {
+                fruit: ['苹果'],
                 entrancePaperId:'',//入口子问卷id
                 isShowSetEntranceModal:false,
                 paperFormRules: {
@@ -77,6 +135,9 @@
                     ],
                     aliasName: [
                         {required: true, message: "问卷别名不能为空", trigger: "blur"}
+                    ],
+                    measureTable: [
+                        {required: true, type:'array',min:1,message: "量表不能为空", trigger: "change"}
                     ],
                 },
                 paperForm:{
@@ -417,7 +478,7 @@
                     this.deleteById(toDeletePaper.id)
 
                     this.setNextIdTheValueWhereNextIdIsValue(toDeletePaper.nextId,toDeletePaper.id)
-                    
+
                     this.insertAfterIdEqual(params.row.nextId,toDeletePaper)
                     this.getList()
                 }
@@ -455,6 +516,10 @@
             opPaper(){
                 this.$refs.paperForm.validate(valid=>{
                     if(valid){
+
+
+
+
                         this.isShowPaperModal=false;
 
                         if(this.opType==='add'){
