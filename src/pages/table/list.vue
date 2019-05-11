@@ -98,6 +98,20 @@
                                     },
                                     on:{
                                         click:()=>{
+                                            this.detail(params)
+                                        }
+                                    }
+                                },'查看'),
+                                h('Button',{
+                                    props:{
+                                        type:'success',
+                                        size:'small'
+                                    },
+                                    style:{
+                                        marginRight:'5px'
+                                    },
+                                    on:{
+                                        click:()=>{
                                             this.publish(params)
                                         }
                                     }
@@ -149,6 +163,9 @@
                         // id:params.row._id,
                     }
                 })
+            },
+            detail(params){
+                this.$router.push('/table/detail')
             },
             publish(params){
                 this.$Message.success("发布成功！")

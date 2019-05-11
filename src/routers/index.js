@@ -25,6 +25,7 @@ const paper_operate = r => require.ensure([], () => r(require('../pages/paper/op
 const childpaper_list = r => require.ensure([], () => r(require('../pages/childpaper/list')), 'childpaper_list')
 
 const table_list = r => require.ensure([], () => r(require('../pages/table/list')), 'table_list')
+const table_detail = r => require.ensure([], () => r(require('../pages/table/detail')), 'table_detail')
 const table_operate = r => require.ensure([], () => r(require('../pages/table/operate')), 'table_operate')
 
 
@@ -88,6 +89,9 @@ const router=new VueRouter({
         {
             path:'/table/list',
             component:table_list
+        },{
+            path:'/table/detail',
+            component:table_detail
         },{
             path:'/table/operate',
             component:table_operate
