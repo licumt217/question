@@ -20,13 +20,13 @@ const userGroup_operate = r => require.ensure([], () => r(require('../pages/user
 const statistics_list = r => require.ensure([], () => r(require('../pages/statistics/list')), 'statistics_list')
 
 const paper_list = r => require.ensure([], () => r(require('../pages/paper/list')), 'paper_list')
-const paper_operate = r => require.ensure([], () => r(require('../pages/paper/operate')), 'paper_operate')
+const paper_detail = r => require.ensure([], () => r(require('../pages/paper/detail')), 'paper_detail')
 
-const childpaper_list = r => require.ensure([], () => r(require('../pages/childpaper/list')), 'childpaper_list')
 
 const table_list = r => require.ensure([], () => r(require('../pages/table/list')), 'table_list')
 const table_detail = r => require.ensure([], () => r(require('../pages/table/detail')), 'table_detail')
 const table_operate = r => require.ensure([], () => r(require('../pages/table/operate')), 'table_operate')
+const table_group = r => require.ensure([], () => r(require('../pages/table/group')), 'table_group')
 
 
 const questiontype_list = r => require.ensure([], () => r(require('../pages/questiontype/list')), 'questiontype_list')
@@ -75,14 +75,8 @@ const router=new VueRouter({
             path:'/paper/list',
             component:paper_list
         },{
-            path:'/paper/operate',
-            component:paper_operate
-        },
-
-        //子问卷管理
-        {
-            path:'/childpaper/list',
-            component:childpaper_list
+            path:'/paper/detail',
+            component:paper_detail
         },
 
         //量表管理
@@ -95,6 +89,9 @@ const router=new VueRouter({
         },{
             path:'/table/operate',
             component:table_operate
+        },{
+            path:'/table/group',
+            component:table_group
         },
 
         //userGroup

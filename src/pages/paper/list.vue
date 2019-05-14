@@ -139,7 +139,7 @@
                                     },
                                     on:{
                                         click:()=>{
-                                            this.go2ChildList(params)
+                                            this.detail(params)
                                         }
                                     }
                                 },'查看'),
@@ -224,10 +224,10 @@
                 // })
             },
             /**
-             * 查看，进入子问卷
+             * 查看，设置量表
              */
-            go2ChildList(){
-                this.$router.push('/childpaper/list')
+            detail(){
+                this.$router.push('/paper/detail')
             },
             add() {
                 this.paperForm={}
