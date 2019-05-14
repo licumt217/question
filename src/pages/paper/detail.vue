@@ -15,36 +15,26 @@
                     <p slot="title">
                         {{data.tableGroupName}}
                     </p>
-                    <a href="#" slot="extra" @click.prevent="changeLimit">
-                        <Icon type="ios-loop-strong"></Icon>
-                        Change
-                    </a>
-                    <p v-for="item in data.tableList" style="margin-bottom: 5px;">
-                        <Row>
-                            <Col span="18">
-                                    <p >
-                                        {{item.tableName}}
-                                    </p>
-                            </Col>
-                            <Col span="6">
-                                <Button type="error" size="small" @click="add">移除</Button>
-                                <Button type="success" size="small" @click="add">设置为入口量表</Button>
-                            </Col>
-                        </Row>
-                    </p>
+                    <Row v-for="item in data.tableList" style="margin-bottom: 5px;">
+                        <Col span="18">
+                            {{item.tableName}}
+                        </Col>
+                        <Col span="6">
+                            <Button type="error" size="small" @click="remove">移除</Button>
+                            <Button type="success" size="small" @click="setEntranceTable">设置为入口量表</Button>
+                        </Col>
+                    </Row>
 
                 </Card>
 
                 <Card style="width:100%;margin-bottom: 1em;" v-for="data in data.dataList">
                     <Row>
                         <Col span="18">
-                            <p >
-                                {{data.tableName}}
-                            </p>
+                            {{data.tableName}}
                         </Col>
                         <Col span="6">
-                            <Button type="error" size="small" @click="add">移除</Button>
-                            <Button type="success" size="small" @click="add">设置量表组</Button>
+                            <Button type="error" size="small" @click="remove">移除</Button>
+                            <Button type="success" size="small" @click="showTableGroupModal">设置量表组</Button>
                         </Col>
                     </Row>
 
@@ -59,8 +49,6 @@
                 title="选择量表"
                 :mask-closable="false"
         >
-
-
             <Form :model="formItem" :label-width="100">
 
                 <FormItem label="请选择量表">
@@ -69,19 +57,33 @@
                     </Select>
                 </FormItem>
 
-
-                <!--<FormItem label="请选择量表组">-->
-                    <!--<Select v-model="formItem.tableGroupId">-->
-                        <!--<Option v-for="item in tableGroupList" :value="item.id" :key="item.id">{{ item.name }}</Option>-->
-                    <!--</Select>-->
-                <!--</FormItem>-->
-
             </Form>
-
 
             <div slot="footer">
                 <Button type="text" size="large" @click="isShowModal=false">取消</Button>
                 <Button type="primary" size="large" @click="save">确定</Button>
+            </div>
+        </Modal>
+
+        <!--设置量表组-->
+        <Modal
+                v-model="isShowTableGroupModal"
+                title="设置量表组"
+                :mask-closable="false"
+        >
+            <Form :label-width="100">
+
+                <FormItem label="请选择量表组">
+                    <Select v-model="tableGroupId">
+                        <Option v-for="item in tableGroupList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                    </Select>
+                </FormItem>
+
+            </Form>
+
+            <div slot="footer">
+                <Button type="text" size="large" @click="isShowTableGroupModal=false">取消</Button>
+                <Button type="primary" size="large" @click="setTableGroup()">确定</Button>
             </div>
         </Modal>
 
@@ -93,187 +95,20 @@
 
 <script>
 
-    //TODO 父问卷多个子问卷，子问卷的规则是必须设置的吗？还是可选的？规则和对应的下一张试卷必须都有吗？
-
     export default {
         data() {
             return {
 
                 formItem: {},
-                fruit: ['苹果'],
                 entrancePaperId: '',//入口子问卷id
                 isShowModal: false,
-                paperFormRules: {
-                    name: [
-                        {required: true, message: "问卷名称不能为空", trigger: "blur"}
-                    ],
-                    aliasName: [
-                        {required: true, message: "问卷别名不能为空", trigger: "blur"}
-                    ],
-                    measureTable: [
-                        {required: true, type: 'array', min: 1, message: "量表不能为空", trigger: "change"}
-                    ],
-                },
+                isShowTableGroupModal:false,
                 paperForm: {
                     name: '',
                     aliasName: ''
                 },
                 userGroup: '',
-                userGroupList: [{
-                    label: '用户组1',
-                    value: '1'
-                }, {
-                    label: '用户组2',
-                    value: '2'
-                }, {
-                    label: '用户组3',
-                    value: '3'
-                },],
                 isShowUserGroupModal: false,
-                columns: [
-                    {
-                        type: 'index',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '名称',
-                        key: 'name'
-                    },
-                    {
-                        title: '别名',
-                        key: 'aliasName'
-                    },
-                    {
-                        title: '创建时间',
-                        width: 120,
-                        key: 'createDt'
-                    },
-                    {
-                        title: '状态',
-                        width: 120,
-                        key: 'state',
-                        render: (h, params) => {
-                            return h('div', {}, params.row.state === 0 ? '已完成' : '未完成')
-                        }
-                    },
-                    {
-                        title: '入口问卷',
-                        width: 120,
-                        key: 'isEntrance',
-                        render: (h, params) => {
-                            return h('div', {}, params.row.isEntrance ? '是' : '否')
-                        }
-                    },
-                    {
-                        title: '移动',
-                        key: 'move',
-                        render: (h, params) => {
-                            return h('div', [
-                                h(params.index === 0 ? '' : 'Icon', {
-                                    props: {
-                                        type: 'md-arrow-round-up',
-                                        size: 'small',
-                                        size: 20
-                                    },
-                                    style: {
-                                        cursor: 'pointer',
-                                        marginRight: '6px',
-
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.up(params)
-                                        }
-                                    }
-                                }, ''),
-                                h(params.index === this.dataList.length - 1 ? '' : 'Icon', {
-                                    props: {
-                                        type: 'md-arrow-round-down',
-                                        size: 20
-                                    },
-                                    style: {
-                                        cursor: 'pointer',
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.down(params)
-                                        }
-                                    }
-                                }, ''),
-
-
-                            ])
-                        }
-                    },
-
-                    {
-                        title: '操作',
-                        key: 'action',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.edit(params)
-                                        }
-                                    }
-                                }, '编辑'),
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.detail(params)
-                                        }
-                                    }
-                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.delete(params)
-                                        }
-                                    }
-                                }, '删除'),
-                                h('Button', {
-                                    props: {
-                                        type: 'success',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.rule(params)
-                                        }
-                                    }
-                                }, '规则')
-
-                            ])
-                        }
-                    }
-
-                ],
                 opType: 'add',
                 oldEntrancePaperId: null,
                 tableList: [{
@@ -298,8 +133,8 @@
                     name: '量表组2',
                     createDt: '2019/02/17',
                 }],
-                data:{
-                    groupList:[{
+                data: {
+                    groupList: [{
                         tableGroupId: 1,
                         tableGroupName: '量表组1',
                         tableList: [{
@@ -315,7 +150,7 @@
                             tableName: '量表3',
 
                         }]
-                    },{
+                    }, {
                         tableGroupId: 2,
                         tableGroupName: '量表组2',
                         tableList: [{
@@ -333,22 +168,50 @@
                         }]
                     }],
 
-                    dataList:[{
+                    dataList: [{
                         tableId: 7,
                         tableName: '量表7',
 
-                    },{
+                    }, {
                         tableId: 8,
                         tableName: '量表8',
 
-                    },]
-                }
+                    },],
+
+                },
+                tableGroupId:''
             }
         },
         mounted() {
             // this.getList()
         },
         methods: {
+            showTableGroupModal(){
+                this.isShowTableGroupModal=true;
+            },
+            setTableGroup(){
+                if(!this.tableGroupId){
+                    this.$Message.warning('请选择量表组！');
+                    return;
+
+                }
+
+                this.isShowTableGroupModal=false;
+                this.$Message.success('设置成功！');
+            },
+
+            remove(){
+                this.$Modal.confirm({
+                    title: '您确认删除吗？',
+                    content: '',
+                    onOk: () => {
+                        this.$Message.success('删除成功！');
+                    },
+                    onCancel: () => {
+                        // this.$Message.info('Clicked cancel');
+                    }
+                });
+            },
             save() {
 
 
@@ -356,11 +219,6 @@
                     this.$Message.warning("请选择量表！")
                     return
                 }
-
-                // if (!this.formItem.tableGroupId) {
-                //     this.$Message.warning("请选择量表组！")
-                //     return
-                // }
 
                 this.$Message.warning("添加成功！")
                 this.isShowModal = false;
@@ -387,23 +245,18 @@
                     this.$Message.warning("请先添加子问卷！")
                 }
             },
-            //设置入口问卷
-            setEntrancePaper() {
-                if (!this.entrancePaperId) {
-                    this.$Message.warning("请选择入口问卷！")
-                } else {
-                    //调用后台接口
-
-                    if (this.entrancePaperId === this.oldEntrancePaperId) {
-                        this.$Message.warning("入口问卷没有改变！")
-                        return;
+            //设置入口量表
+            setEntranceTable() {
+                this.$Modal.confirm({
+                    title: '您确认设置此量表为入口量表吗？',
+                    content: '',
+                    onOk: () => {
+                        this.$Message.success('设置成功！');
+                    },
+                    onCancel: () => {
+                        // this.$Message.info('Clicked cancel');
                     }
-
-                    this.isShowSetEntranceModal = false;
-                    this.$Message.success("设置成功！")
-                    this.realSetEntranceId();
-                    this.getList()
-                }
+                });
             },
             realSetEntranceId() {
                 let d = JSON.parse(sessionStorage.dataList)
